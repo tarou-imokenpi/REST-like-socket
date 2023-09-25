@@ -9,7 +9,7 @@ from easy_socket import SocketClient
 
 connection = SocketClient(host="localhost")
 
-response1 = connection.request.get(request_data="apple_price")  # 資源にアクセスしその値をgetする
+response1 = connection.request.get(request_data="apple_price")
 response2 = connection.request.post(100)
 
 
