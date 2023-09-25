@@ -5,7 +5,7 @@ from threading import Thread
 
 
 class ServerRequestHandler(BaseRequestHandler):
-    def if_Post(self, post_data):
+    def if_Post(self, posted_data):
         """POSTメソッドの処理
 
         Parameters
@@ -16,7 +16,7 @@ class ServerRequestHandler(BaseRequestHandler):
         """
         pass
 
-    def if_Get(self, request_data):
+    def if_Get(self, requested_data):
         """GETメソッドの処理
 
         Parameters
@@ -27,7 +27,7 @@ class ServerRequestHandler(BaseRequestHandler):
         """
         pass
 
-    def get_client_address(self, address):
+    def get_client_address(self, client_address):
         """クライアントのアドレス情報を取得するメソッド
         Parameters
         ----------

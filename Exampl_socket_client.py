@@ -5,10 +5,10 @@ from easy_socket import SocketClient
 # -----------------------------------------------------------------
 
 
-Connection = SocketClient(host="localhost")
+connection = SocketClient(host="localhost")
 
-response1 = Connection.request.get(request_data="price")  # 資源にアクセスしその値をgetする
-response2 = Connection.request.post({"win": "tarou"})
+response1 = connection.request.get(request_data="price")  # 資源にアクセスしその値をgetする
+response2 = connection.request.post("hello")
 
 
 print(response1)
