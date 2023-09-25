@@ -9,7 +9,7 @@ class SocketClient:
         self_HOST, self_PORT = host, port
 
     class request:
-        """リクエストを送信してレスポンスを受信するメソッド
+        """リクエストを送信してレスポンスを受信
 
         Parameters
         ----------
