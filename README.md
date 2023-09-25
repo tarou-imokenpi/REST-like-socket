@@ -48,7 +48,7 @@ server.join()
 
 ## RemoteResources_Access
 
-クライアントがサーバー変数の取得、更新、追加が出来ます。
+クライアントがサーバー側の変数の取得、更新、追加が出来ます。
 ### client
 ```python
 from REST_like_socket import SocketClient
