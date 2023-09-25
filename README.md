@@ -1,7 +1,7 @@
 # REST-like-socket
 RESTライクなGETとPOSTの概念を取り入れたsocket通信ライブラリです。
 ## Usage
-
+外部に公開したい場合は`host`を"0.0.0.0"に設定してください。
 ### client
 ```python
 from REST_like_socket import SocketClient
@@ -44,4 +44,52 @@ server.join()
 
 ```
 
-外部に公開したい場合は`host`を"0.0.0.0"に設定してください。
+
+
+## RemoteResources_Access
+
+クライアントがサーバー変数の取得、更新、追加が出来ます。
+### client
+```python
+from REST_like_socket import SocketClient
+
+
+connection = SocketClient(host="localhost")
+
+response1 = connection.request.RemoteResources_Access(
+    method="SET", set_variable="name", set_value="alice"
+)
+
+response2 = connection.request.RemoteResources_Access(
+    method="READ", read_variable="name"
+)
+
+
+print(response1) # >>> SET OK
+print(response2) # >>> alice
+
+```
+### server
+```python
+from REST_like_socket import Server, ServerRequestHandler
+
+
+RemoteResources = dict(
+    {
+        "name": "tarou",
+        "point": 0,
+    }
+)
+
+
+class CustomHandler(ServerRequestHandler):
+    # リモートでアクセスできる資源を指定します。
+    def set_RemoteResource(self):
+        self.RemoteResources: dict = RemoteResources
+
+
+server = Server(host="localhost", CustomHandler=CustomHandler)
+server.start()
+
+server.join()
+```

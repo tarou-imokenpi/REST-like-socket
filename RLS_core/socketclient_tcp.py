@@ -1,5 +1,6 @@
 import json
 import socket
+from typing import Literal
 
 
 class SocketClient:
@@ -9,22 +10,6 @@ class SocketClient:
         self_HOST, self_PORT = host, port
 
     class request:
-        """リクエストを送信してレスポンスを受信
-
-        Parameters
-        ----------
-        method : Literal["POST", "GET"]
-            送信するHTTPメソッド ("POST" または "GET")
-        data : any
-            送信するデータ
-
-        Returns
-        -------
-        str
-            サーバーからのレスポンスメッセージ
-
-        """
-
         def get(request_data: str):
             try:
                 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
@@ -51,10 +36,30 @@ class SocketClient:
             except ConnectionRefusedError:
                 return "接続に失敗しました。"
 
-
-# TCP_Connection = SocketClient(host="localhost", port=9999)
-
-
-# response = TCP_Connection.request("POST", ["aaa", "bbb"])
-
-# print(response)
+        def RemoteResources_Access(
+            method: Literal["SET", "READ"],
+            set_variable: str = None,
+            read_variable: str = None,
+            set_value=None,
+        ):
+            if method == "SET":
+                send_data = {
+                    "RRA": method,
+                    "set_variable": set_variable,
+                    "set_value": set_value,
+                }
+            else:
+                send_data = {
+                    "RRA": method,
+                    "read_variable": read_variable,
+                }
+            try:
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+                    sock.connect((self_HOST, self_PORT))
+                    send_data_json = json.dumps(send_data)
+                    send_data: bytes = bytes(send_data_json, encoding="utf-8")
+                    sock.sendall(send_data)
+                    response = str(sock.recv(4096), encoding="utf-8")
+                    return response
+            except ConnectionRefusedError:
+                return "接続に失敗しました。"

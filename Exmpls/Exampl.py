@@ -38,12 +38,6 @@ class CustomHandler(ServerRequestHandler):
         # getのときの処理
         print(f"get:{requested_data}")
 
-    def get_client_address(self, client_address):
-        """リクエストされたipアドレスの処理"""
-
-        # print(f"address:{address}")
-        pass
-
 
 server = Server(host="localhost", CustomHandler=CustomHandler)
 server.start()

@@ -5,6 +5,14 @@ from threading import Thread
 
 
 class ServerRequestHandler(BaseRequestHandler):
+    def set_RemoteResource(self):
+        self.RemoteResources: dict = {}
+
+    def check_RemoteResource(self):
+        if not isinstance(self.RemoteResources, dict):
+            self.RemoteResources: dict = {}
+            raise (TypeError)
+
     def if_Post(self, posted_data):
         """POSTメソッドの処理
 
@@ -27,6 +35,47 @@ class ServerRequestHandler(BaseRequestHandler):
         """
         pass
 
+    def if_RemoteResources_Access(self, method):
+        if method == "SET":
+            self.set_variable = self.json_data["set_variable"]
+            if self.find_variable(self.set_variable):
+                self.RemoteResources[self.set_variable] = self.json_data["set_value"]
+                print(self.RemoteResources[self.set_variable])
+                self.send_response("SET OK")
+            else:
+                self.send_response("SET error")
+
+        elif method == "READ":
+            self.read_variable = self.json_data["read_variable"]
+            if self.find_variable(self.read_variable):
+                response = self.RemoteResources[self.read_variable]
+                self.send_response(response)
+            else:
+                self.send_response("SET error")
+
+        else:
+            self.send_response("method error")
+
+    def find_variable(self, target_variable):
+        if target_variable in self.RemoteResources:
+            return True
+        else:
+            return False
+
+    def custom_HandleEvent(self, bytes_data: bytes, decoded_data: str, json_data: dict):
+        """接続を受けたときの通常のハンドルにさらにオプションを加えたい場合に使用
+
+        Parameters
+        ----------
+        bytes_data : bytes
+            受信したbytes_data
+        decoded_data : str
+            受信したdecoded_data
+        json_data : dict
+            受信したjson_data
+        """
+        pass
+
     def get_client_address(self, client_address):
         """クライアントのアドレス情報を取得するメソッド
         Parameters
@@ -37,32 +86,32 @@ class ServerRequestHandler(BaseRequestHandler):
         """
         pass
 
+        self.set_RemoteResource()
+        self.check_RemoteResource()
+
     def handle(self):
-        """
-        TODO:リモート資源にアクセスできるようにする
-        """
-        # 受信
+        self.get_client_address(self.client_address[0])
         try:
-            self.get_client_address(self.client_address[0])
-            self.data: bytes = self.request.recv(4096).strip()
-            self.data: str = self.data.decode()
-            self.data: dict = json.loads(self.data)
-            if "POST" in self.data:
-                self.if_Post(self.data["POST"])
+            self.bytes_data: bytes = self.request.recv(4096).strip()
+            self.decoded_data: str = self.bytes_data.decode()
+            self.json_data: dict = json.loads(self.decoded_data)
 
-            elif "GET" in self.data:
-                self.if_Get(self.data["GET"])
-
+            if "GET" in self.json_data:
+                self.if_Get(self.json_data["GET"])
+            elif "POST" in self.json_data:
+                self.if_Post(self.json_data["POST"])
+            elif "RRA" in self.json_data:
+                self.if_RemoteResources_Access(self.json_data["RRA"])
             else:
                 self.send_response("method error")
+
+            self.custom_HandleEvent(self.bytes_data, self.decoded_data, self.json_data)
 
         except json.JSONDecodeError as e:
             print(f"Error decoding JSON: {e}")
             self.send_response("JSON decode error")
 
-        self.get_client_address(self.client_address[0])
-
-    def send_response(self, message=None) -> None:
+    def send_response(self, message) -> None:
         """レスポンスを送信するメソッド
 
         Parameters
@@ -76,13 +125,9 @@ class ServerRequestHandler(BaseRequestHandler):
             message引数が設定されていない場合
 
         """
-        try:
-            data = str(message)
-            send_data: bytes = bytes(data, encoding="utf-8")
-            self.request.sendall(send_data)
-        except TypeError:
-            print("エラーが発生しました。")
-            print("--------message引数を設定してください---------")
+        data = str(message)
+        send_data: bytes = bytes(data, encoding="utf-8")
+        self.request.sendall(send_data)
 
     # def send_bytes(self, bytes_data):
     #     self.request.sendall(bytes_data)
