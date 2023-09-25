@@ -1,4 +1,4 @@
-from easy_socket import SocketClient
+from REST_like_socket import SocketClient
 
 # -----------------------------------------------------------------
 # client

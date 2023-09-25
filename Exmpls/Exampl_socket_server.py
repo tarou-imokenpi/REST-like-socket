@@ -1,4 +1,4 @@
-from easy_socket import Server, ServerRequestHandler
+from REST_like_socket import Server, ServerRequestHandler
 
 
 class Resources:

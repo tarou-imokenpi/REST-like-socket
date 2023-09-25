@@ -1,4 +1,4 @@
-from easy_socket import Server, SocketClient, ServerRequestHandler
+from REST_like_socket import Server, SocketClient, ServerRequestHandler
 
 
 # TODO: GlobalResource(リアルタイムでサーバーとクライアントで変更できる変数の辞書)を実装する
