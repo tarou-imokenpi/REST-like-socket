@@ -1,10 +1,10 @@
-# easy-socket
+# REST-like-socket
 RESTライクなGETとPOSTの概念を取り入れたsocket通信ライブラリです。
 ## Usage
 
 ### client
 ```python
-from easy_socket import SocketClient
+from REST_like_socket import SocketClient
 
 
 connection = SocketClient(host="localhost")
@@ -19,7 +19,7 @@ print(response2)
 ### server
 
 ```python
-from easy_socket import Server, ServerRequestHandler
+from REST_like_socket import Server, ServerRequestHandler
 
 
 class CustomHandler(ServerRequestHandler):
