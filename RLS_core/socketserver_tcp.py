@@ -42,7 +42,7 @@ class ServerRequestHandler(BaseRequestHandler):
                 self.RemoteResources[self.set_variable] = self.json_data["set_value"]
                 self.send_response({"status": "OK", "method": method})
             else:
-                self.send_response({"status": "error", "method": method})
+                self.send_response({"status": "error Not found", "method": method})
 
         elif method == "NEW":
             self.set_variable = self.json_data["set_variable"]
@@ -50,19 +50,18 @@ class ServerRequestHandler(BaseRequestHandler):
                 self.RemoteResources[self.set_variable] = self.json_data["set_value"]
                 self.send_response({"status": "OK", "method": method})
             else:
-                self.send_response({"status": "Already", "method": method})
+                self.send_response({"status": "error Already", "method": method})
 
         elif method == "READ":
-            print(self.json_data)
             self.read_variable = self.json_data["read_variable"]
             if self.find_variable(self.read_variable):
                 response = self.RemoteResources[self.read_variable]
-                self.send_response(response)
+                self.send_response({"status": "OK", "required_variable": response})
             else:
-                self.send_response({"status": "error", "method": method})
+                self.send_response({"status": "error Not found", "method": method})
 
         else:
-            self.send_response({"status": "error", "method": method})
+            self.send_response({"status": "error Not found method", "method": method})
 
     def find_variable(self, target_variable):
         if target_variable in self.RemoteResources:
@@ -133,15 +132,15 @@ class ServerRequestHandler(BaseRequestHandler):
             message引数が設定されていない場合
 
         """
-        data = str(message)
-        send_data: bytes = bytes(data, encoding="utf-8")
+        send_data = json.dumps(message)
+        send_data: bytes = bytes(send_data, encoding="utf-8")
         self.request.sendall(send_data)
 
     # def send_bytes(self, bytes_data):
     #     self.request.sendall(bytes_data)
 
 
-def Server(host="0.0.0.0", port=60000, CustomHandler=ServerRequestHandler) -> Thread:
+def Server(host="localhost", port=60000, CustomHandler=ServerRequestHandler) -> Thread:
     """サーバーの設定
 
     Parameters
