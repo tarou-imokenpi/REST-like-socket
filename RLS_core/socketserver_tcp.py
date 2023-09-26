@@ -5,12 +5,12 @@ from threading import Thread
 
 
 class ServerRequestHandler(BaseRequestHandler):
-    def set_RemoteResource(self):
-        self.RemoteResources: dict = {}
+    def set_LocalResource(self):
+        self.LocalResources: dict = dict()
 
     def check_RemoteResource(self):
-        if not isinstance(self.RemoteResources, dict):
-            self.RemoteResources: dict = {}
+        if not isinstance(self.LocalResources, dict):
+            self.LocalResources: dict = {}
             raise (TypeError)
 
     def if_Post(self, posted_data):
@@ -36,35 +36,44 @@ class ServerRequestHandler(BaseRequestHandler):
         pass
 
     def if_RemoteResources_Access(self, method):
-        if method == "SET":
+        if method == "WRITE":
+            self.set_variable = self.json_data["set_variable"]
+            self.LocalResources[self.set_variable] = self.json_data["set_value"]
+            self.send_response({"status": "OK"})
+
+        elif method == "SET":
             self.set_variable = self.json_data["set_variable"]
             if self.find_variable(self.set_variable):
-                self.RemoteResources[self.set_variable] = self.json_data["set_value"]
-                self.send_response({"status": "OK", "method": method})
+                self.LocalResources[self.set_variable] = self.json_data["set_value"]
+                self.send_response({"status": "OK"})
             else:
-                self.send_response({"status": "error Not found", "method": method})
+                self.send_response(
+                    {"status": "error", "mesaage": "Cannot find this variable."}
+                )
 
         elif method == "NEW":
             self.set_variable = self.json_data["set_variable"]
             if not self.find_variable(self.set_variable):
-                self.RemoteResources[self.set_variable] = self.json_data["set_value"]
-                self.send_response({"status": "OK", "method": method})
+                self.LocalResources[self.set_variable] = self.json_data["set_value"]
+                self.send_response({"status": "OK"})
             else:
-                self.send_response({"status": "error Already", "method": method})
+                self.send_response(
+                    {"status": "error", "mesaage": "This variable is already set."}
+                )
 
         elif method == "READ":
             self.read_variable = self.json_data["read_variable"]
             if self.find_variable(self.read_variable):
-                response = self.RemoteResources[self.read_variable]
+                response = self.LocalResources[self.read_variable]
                 self.send_response({"status": "OK", "required_variable": response})
             else:
-                self.send_response({"status": "error Not found", "method": method})
+                self.send_response({"status": "error Not found"})
 
         else:
-            self.send_response({"status": "error Not found method", "method": method})
+            self.send_response({"status": "error Not found method"})
 
     def find_variable(self, target_variable):
-        if target_variable in self.RemoteResources:
+        if target_variable in self.LocalResources:
             return True
         else:
             return False
@@ -93,7 +102,7 @@ class ServerRequestHandler(BaseRequestHandler):
         """
         pass
 
-        self.set_RemoteResource()
+        self.set_LocalResource()
         self.check_RemoteResource()
 
     def handle(self):
@@ -162,7 +171,6 @@ def Server(host="localhost", port=60000, CustomHandler=ServerRequestHandler) -> 
         """TCPサーバーを設定し起動する"""
         with socketserver.TCPServer((host, port), CustomHandler) as server:
             print("start server")
-
             server.serve_forever()
 
     return Thread(target=set_TCPServer, daemon=True)
