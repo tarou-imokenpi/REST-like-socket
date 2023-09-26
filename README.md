@@ -65,8 +65,8 @@ response2 = connection.request.RemoteResources_Access(
 )
 
 
-print(response1) # >>> SET OK
-print(response2) # >>> alice
+print(response1) # >>> {'status': 'OK', 'method': 'SET'}
+print(response2) # >>> {'status': 'OK', 'required_variable': 'alice'}
 
 ```
 ### server
