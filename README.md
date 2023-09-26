@@ -1,5 +1,7 @@
 # REST-like-socket
 RESTライクなGETとPOSTの概念を取り入れたsocket通信ライブラリです。
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ## Usage
 外部に公開したい場合は`host`を"0.0.0.0"に設定してください。
 ### client
