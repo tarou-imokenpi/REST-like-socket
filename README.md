@@ -45,11 +45,42 @@ server.start()
 server.join()
 
 ```
+# High Level API SyncedResources
+ホストとクライアント間で同期された変数が簡単に使用できます。
+### client
+```python
+from REST_like_socket import SyncedResources
 
 
+syncedResources = SyncedResources(
+    isResource_host=False,
+    synchronize_to="X.X.X.X",
+)
+
+num = syncedResources.read("num")
+print(num)
+
+
+syncedResources.write("apple_price", 100)
+
+```
+### host
+```python
+from REST_like_socket import SyncedResources
+
+syncedResources = SyncedResources(isResource_host=True)
+syncedResources.server.start()
+
+syncedResources.write("num", 0)
+
+apple_price= syncedResources.read("apple_price")
+print(apple_price)
+
+
+syncedResources.server.join()
+```
 
 ## RemoteResources_Access
-
 クライアントがサーバー側の変数の取得、更新、追加が出来ます。
 ### client
 ```python
