@@ -77,7 +77,6 @@ from REST_like_socket import Server, ServerRequestHandler
 RemoteResources = dict(
     {
         "name": "tarou",
-        "point": 0,
     }
 )
 
