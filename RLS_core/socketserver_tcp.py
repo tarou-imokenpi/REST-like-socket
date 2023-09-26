@@ -40,21 +40,29 @@ class ServerRequestHandler(BaseRequestHandler):
             self.set_variable = self.json_data["set_variable"]
             if self.find_variable(self.set_variable):
                 self.RemoteResources[self.set_variable] = self.json_data["set_value"]
-                print(self.RemoteResources[self.set_variable])
-                self.send_response("SET OK")
+                self.send_response({"status": "OK", "method": method})
             else:
-                self.send_response("SET error")
+                self.send_response({"status": "error", "method": method})
+
+        elif method == "NEW":
+            self.set_variable = self.json_data["set_variable"]
+            if not self.find_variable(self.set_variable):
+                self.RemoteResources[self.set_variable] = self.json_data["set_value"]
+                self.send_response({"status": "OK", "method": method})
+            else:
+                self.send_response({"status": "Already", "method": method})
 
         elif method == "READ":
+            print(self.json_data)
             self.read_variable = self.json_data["read_variable"]
             if self.find_variable(self.read_variable):
                 response = self.RemoteResources[self.read_variable]
                 self.send_response(response)
             else:
-                self.send_response("SET error")
+                self.send_response({"status": "error", "method": method})
 
         else:
-            self.send_response("method error")
+            self.send_response({"status": "error", "method": method})
 
     def find_variable(self, target_variable):
         if target_variable in self.RemoteResources:

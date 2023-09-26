@@ -11,6 +11,20 @@ response2 = connection.request.RemoteResources_Access(
     method="READ", read_variable="name"
 )
 
+response3 = connection.request.RemoteResources_Access(
+    method="READ", read_variable="new_variable_name"
+)
 
-print(response1)
-print(response2)
+response4 = connection.request.RemoteResources_Access(
+    method="NEW", set_variable="new_variable_name", set_value=1000
+)
+
+response5 = connection.request.RemoteResources_Access(
+    method="READ", read_variable="new_variable_name"
+)
+
+print(f"response1: {response1}")
+print(f"response2: {response2}")
+print(f"response3: {response3}")
+print(f"response4: {response4}")
+print(f"response5: {response5}")

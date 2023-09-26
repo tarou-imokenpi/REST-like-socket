@@ -37,12 +37,12 @@ class SocketClient:
                 return "接続に失敗しました。"
 
         def RemoteResources_Access(
-            method: Literal["SET", "READ"],
+            method: Literal["SET", "READ", "NEW"],
             set_variable: str = None,
             read_variable: str = None,
             set_value=None,
         ):
-            if method == "SET":
+            if method == "SET" or method == "NEW":
                 send_data = {
                     "RRA": method,
                     "set_variable": set_variable,
@@ -62,4 +62,4 @@ class SocketClient:
                     response = str(sock.recv(4096), encoding="utf-8")
                     return response
             except ConnectionRefusedError:
-                return "接続に失敗しました。"
+                return {"ConnectionRefusedError"}
