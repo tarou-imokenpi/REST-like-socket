@@ -2,6 +2,13 @@
 RESTライクなGETとPOSTの概念を取り入れたsocket通信ライブラリです。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+
+## install
+正式リリースではありませんが、実験的に試すことが出来ます。
+```bash
+pip install -i https://test.pypi.org/simple/ REST-like-socket
+```
 ## Usage
 外部に公開したい場合は`host`を"0.0.0.0"に設定してください。
 ### client
