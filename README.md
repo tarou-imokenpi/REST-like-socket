@@ -7,7 +7,7 @@ RESTライクなGETとPOSTの概念を取り入れたsocket通信ライブラリ
 ## install
 正式リリースではありませんが、実験的に試すことが出来ます。
 ```bash
-pip install -i https://test.pypi.org/simple/ REST-like-socket
+pip install -i https://test.pypi.org/simple/ REST-Like-Socket
 ```
 ## Usage
 外部に公開したい場合は`host`を"0.0.0.0"に設定してください。
