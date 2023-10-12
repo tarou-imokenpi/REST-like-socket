@@ -22,25 +22,10 @@ class SyncedResources:
             def set_LocalResource(self):
                 self.LocalResources: dict = LocalResources
 
-            # def custom_HandleEvent(
-            #     self, bytes_data: bytes, decoded_data: str, json_data: dict
-            # ):
-            #     print(json_data)
-
-            # def if_Get(self, requested_data):
-            #     if requested_data == "LocalResources":
-            #         self.send_response(self.LocalResources)
-
         if self.isResource_host:
             self.server = Server(
                 host=self.host, port=self.port, CustomHandler=CustomHandler
             )
-
-    # def fetch_origin(self):
-    #     if not self.isResource_host:
-    #         response = self.connection.get(request_data="LocalResources")
-    #         print(response)
-    #         self.LocalResources = response
 
     def read(self, read_variable: str):
         if self.isResource_host:

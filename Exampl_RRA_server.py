@@ -12,7 +12,7 @@ RemoteResources = dict(
 class CustomHandler(ServerRequestHandler):
     # リモートでアクセスできる資源を指定します。
     def set_LocalResource(self):
-        self.RemoteResources: dict = RemoteResources
+        self.LocalResources: dict = RemoteResources
 
     def if_Get(self, requested_data):
         self.send_response("aaaa")

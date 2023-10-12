@@ -6,7 +6,7 @@ from threading import Thread
 
 class ServerRequestHandler(BaseRequestHandler):
     def set_LocalResource(self):
-        self.LocalResources: dict = dict()
+        self.LocalResources: dict = {}
 
     def check_RemoteResource(self):
         if not isinstance(self.LocalResources, dict):

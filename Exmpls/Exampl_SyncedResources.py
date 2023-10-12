@@ -4,6 +4,7 @@ from time import sleep
 syncedResources = SyncedResources(
     isResource_host=False,
     synchronize_to="X.X.X.X",
+    port=65000,
 )
 
 for _ in range(30):
